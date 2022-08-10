@@ -1,0 +1,7 @@
+---
+centos_packages:
+  - freeradius 
+  - freeradius-utils
+
+path_users: /etc/raddb/users
+clients_conf: /etc/raddb/clients.conf

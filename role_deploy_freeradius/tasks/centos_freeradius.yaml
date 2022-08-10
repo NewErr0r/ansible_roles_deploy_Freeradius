@@ -1,0 +1,48 @@
+- name: Configure timezone
+  shell:  | 
+    timedatectl set-timezone {{ timezone }}
+
+- name: Configure Firewalld
+  firewalld:
+    service: radius
+    permanent: yes
+    state: enabled
+  notify: 
+    - Restarted Firewalld
+
+- name: Shutdown SELinux now 
+  shell:  | 
+    setenforce 0 
+  when: 
+    - ansible_selinux.status == 'enabled'
+
+- name: Shutdown SELinux
+  ansible.posix.selinux:
+    state: disabled
+  when:
+    - ansible_selinux.status == 'enabled'
+
+- name: Installing and configuring Freeradius
+  dnf: 
+    name: "{{ centos_packages }}"
+    state: latest 
+
+- name: Started and Enabled Freeradius
+  service: 
+    name: radiusd
+    enabled: true 
+    state: started
+
+- name: Settings Freeradius user
+  template: 
+    src: users.j2
+    dest: "{{ path_users }}"
+  notify:
+    - Restarted Freeradius
+
+- name: Configure Remote Clients access 
+  template: 
+    src: clients.conf.j2
+    dest: "{{ clients_conf }}"
+  notify: 
+    - Restarted Freeradius

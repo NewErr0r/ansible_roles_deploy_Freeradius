@@ -1,0 +1,9 @@
+---
+timezone: "Europe/Moscow"
+
+### Freeradius ###
+user: "test"
+user_pass: "test123"
+
+ip_addr_client_1: "192.168.0.108"
+pass_client_1: "P@ssw0rd"

@@ -1,0 +1,7 @@
+---
+- name: Installing the Freeradius Server
+  hosts: all
+  become: true 
+
+  roles:
+    - role_deploy_freeradius
